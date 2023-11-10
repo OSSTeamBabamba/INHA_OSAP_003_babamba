@@ -3,6 +3,7 @@
 
 #include "cse_set.h"
 #include "avl_node.h"
+#include <utility>
 
 class AVLTree : public Set{
 
@@ -16,8 +17,8 @@ protected:
     int size();
 
     int find(int key);
-    int minimum(int key);
-    int maximum(int key);
+    std::pair<int,int> minimum(int key);
+    std::pair<int,int> maximum(int key);
     int rank(int key);
 
     AVLNode* rotateRight(AVLNode* node);

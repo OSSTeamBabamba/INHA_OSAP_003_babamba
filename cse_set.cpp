@@ -5,6 +5,6 @@ int Set::size(){}
 int Set::erase(int key){}
 int Set::insert(int key){}
 int Set::find(int key){}
-int Set::minimum(int key){}
-int Set::maximum(int key){}
+std::pair<int,int> Set::minimum(int key){}
+std::pair<int,int> Set::maximum(int key){}
 int Set::rank(int key){}

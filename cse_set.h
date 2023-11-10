@@ -1,5 +1,6 @@
 #ifndef AVLTREE_CSE_SET_H
 #define AVLTREE_CSE_SET_H
+#include <utility>
 
 class Set {
 public:
@@ -8,8 +9,8 @@ public:
     int erase(int key);
     int insert(int key);
     int find(int key);
-    int minimum(int key);
-    int maximum(int key);
+    std::pair<int,int> minimum(int key);
+    std::pair<int,int> maximum(int key);
     int rank(int key);
 
 private:

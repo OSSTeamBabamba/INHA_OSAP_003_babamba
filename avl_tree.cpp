@@ -37,10 +37,10 @@ AVLNode *AVLTree::findNode(int key) {
 }
 
 
-int AVLTree::minimum(int key) {
+pair<int,int> AVLTree::minimum(int key) {
     return NULL;
 }
-int AVLTree::maximum(int key) {
+pair<int,int> AVLTree::maximum(int key) {
     return NULL;
 }
 int AVLTree::rank(int key) {
