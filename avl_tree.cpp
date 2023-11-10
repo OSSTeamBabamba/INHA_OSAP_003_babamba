@@ -40,9 +40,17 @@ AVLNode *AVLTree::findNode(int key) {
 pair<int,int> AVLTree::minimum(int key) {
     return NULL;
 }
+
 pair<int,int> AVLTree::maximum(int key) {
-    return NULL;
+
+    AVLNode *node = findNode(key);
+
+    while (node->rightNode() != nullptr) {
+        node = node->rightNode();
+    }
+    return make_pair(node->key(), node->depth());
 }
+
 int AVLTree::rank(int key) {
     return NULL;
 }
