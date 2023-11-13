@@ -19,22 +19,22 @@ void AVLNode::setHeight(int32_t height) {
     height_ = height;
 }
 
-AVLNode *AVLNode::parentNode() const {
+AVLNode* AVLNode::parentNode() const {
     return parentNode_;
 }
-void AVLNode::setParentNode(AVLNode *leftNode) {
+void AVLNode::setParentNode(AVLNode* leftNode) {
     parentNode_ = leftNode;
 }
 
-AVLNode *AVLNode::leftNode() const {
+AVLNode* AVLNode::leftNode() const {
     return leftNode_;
 }
-void AVLNode::setLeftNode(AVLNode *leftNode) {
+void AVLNode::setLeftNode(AVLNode* leftNode) {
     leftNode_ = leftNode;
 }
-AVLNode *AVLNode::rightNode() const {
+AVLNode* AVLNode::rightNode() const {
     return rightNode_;
 }
-void AVLNode::setRightNode(AVLNode *rightNode) {
+void AVLNode::setRightNode(AVLNode* rightNode) {
     rightNode_ = rightNode;
 }
