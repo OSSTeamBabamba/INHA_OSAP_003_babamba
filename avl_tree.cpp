@@ -30,9 +30,6 @@ int AVLTree::size() {
     return NULL;
 }
 
-bool AVLTree::empty() { return NULL; }
-int AVLTree::size() { return NULL; }
-
 int AVLTree::find(int key) { return NULL; }
 AVLNode *AVLTree::findNode(int key) { return NULL; }
 
