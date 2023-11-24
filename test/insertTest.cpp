@@ -5,14 +5,15 @@
 using namespace std;
 
 int main(){
-    Set* avltree = new AVLTree();
+    AVLTree* avltree = new AVLTree();
 
-    vector<int> keys = {10, 20, 30, 10, 25, 50, 22};
+    vector<int> keys = {10, 80, 30, 3, 5, 8, 70};
 
     for(int key : keys){
         cout << "Insert: " << key << "\n";
          avltree->insert(key);
     }
+    avltree->inorderTraversal(avltree->getRoot());
     delete avltree;
     return 0;
 }
