@@ -1,67 +1,95 @@
 #include "avl_tree.h"
-#include "avl_node.h"
-
+#include "tree_node.h"
+#include "tree.h"
+#include<algorithm>
 using namespace std;
-int AVLTree::getBalance(AVLNode* node) {
+
+int AVLTree::getBalance(TreeNode* node) { // Balance Factor(BF) ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
+    if (node == nullptr)
+        return 0;
 	int leftNodeBalancedFactor = (node->leftNode() == nullptr) ? -1 : node->leftNode()->depth();
 	int rightNodeBalancedFactor = (node->rightNode() == nullptr) ? -1 : node->rightNode()->depth();
-	if (node == nullptr)
-		return 0;
-	else
-		return abs(leftNodeBalancedFactor - rightNodeBalancedFactor < 2) ? true : false;
+    return leftNodeBalancedFactor - rightNodeBalancedFactor; // ì¢Œìš° ìì‹ ê¹Šì´ë¥¼ ë¹„êµí•´ BF ë¦¬í„´
 }
+
+TreeNode* AVLTree:: rotateRight(TreeNode* z) { // yëŠ” zì˜ ì™¼ìª½ ìì‹ ë…¸ë“œ, xëŠ” yì˜ ì™¼ìª½ ìì‹ ë…¸ë“œë¡œ ì„¤ì •, zë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ì˜¤ë¥¸ìª½ íšŒì „
+    TreeNode *y = z->leftNode();
+    TreeNode *T2 = y->rightNode(); // T2ëŠ” yì˜ ì˜¤ë¥¸ìª½ ìì‹
+
+    // right íšŒì „ ìˆ˜í–‰
+    y->setRightNode(z);// y ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œë¥¼ zë…¸ë“œë¡œ ë³€ê²½
+    z->setLeftNode(T2); // z ë…¸ë“œì˜ ì™¼ìª½ ìì‹ ë…¸ë“œë¥¼ yë…¸ë“œ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬(T2)ë¡œ ë³€ê²½
+    // ìœ„ì¹˜ê°€ ë°”ë€Œì—ˆìœ¼ë¯€ë¡œ ë…¸ë“œ ë†’ì´ ê°±ì‹ 
+    z->setHeight(1 + max(z->leftNode()->height(), z->rightNode()->height()));
+    y->setHeight(1 + max(y->leftNode()->height(), y->rightNode()->height()));
+
+    // ìƒˆë¡œìš´ ë£¨íŠ¸ ë…¸ë“œ yë¥¼ ë°˜í™˜
+    return y;
+}
+
+TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // yëŠ” zì˜ ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œì´ê³ , xëŠ” ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œì¸ ê²½ìš° zë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ì™¼ìª½ íšŒì „
+    TreeNode *y = z->rightNode();
+    TreeNode *T2 = y->leftNode();
+
+    // left íšŒì „ ìˆ˜í–‰
+    y->setLeftNode(z); // yë…¸ë“œì˜ ì™¼ìª½ ìì‹ ë…¸ë“œë¥¼ zë…¸ë“œë¡œ ë³€ê²½
+    z->setRightNode(T2); // zë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œë¥¼ yë…¸ë“œ ì™¼ìª½ ì„œë¸ŒíŠ¸ë¦¬(T2)ë¡œ ë³€ê²½
+
+    // ìœ„ì¹˜ê°€ ë°”ë€Œì—ˆìœ¼ë¯€ë¡œ ë…¸ë“œ ë†’ì´ ê°±ì‹ 
+    z->setHeight(1 + max(z->leftNode()->height(), z->rightNode()->height()));
+    y->setHeight(1 + max(y->leftNode()->height(), y->rightNode()->height()));
+
+    // ìƒˆë¡œìš´ ë£¨íŠ¸ ë…¸ë“œ yë¥¼ ë°˜í™˜
+    return y;
+}
+
 int AVLTree::insert(int key) {
-	// ·çÆ® ³ëµå¿¡¼­ ½ÃÀÛÇÏ¿© »õ Å°¸¦ »ğÀÔ
+
 	root_ = insertRecursive(root_, key);
 	return root_ ? root_->depth() : -1;
-	// ·çÆ® ³ëµåÀÇ ±íÀÌ¸¦ ¹İÈ¯ÇÏ°Å³ª, Æ®¸®°¡ ºñ¾îÀÖÀ¸¸é -1À» ¹İÈ¯
+
 }
-AVLNode* AVLTree:: insertRecursive(AVLNode* node, int key) {
+TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
 	if (node == nullptr) {
-		++total_node_cnt_; // »õ node¸¦ Ãß°¡ÇÏ°í, nodeÀÇ »çÀÌÁî 1¾¿ Áõ°¡
-		return new AVLNode(key, nullptr, nullptr, nullptr); // ³ëµå°¡ ¾øÀ¸¸é »õ ³ëµå¸¦ »ı¼ºÇÏ¿© ¹İÈ¯
+		++total_node_cnt_;
+		return new TreeNode(key, nullptr, nullptr, nullptr);
 	}
 	if (key < node->key()) {
-		node->setLeftNode(insertRecursive(node->leftNode(), key)); // Å°°¡ ÇöÀç ³ëµåÀÇ Å°º¸´Ù ÀÛÀ¸¸é ¿ŞÂÊ ¼­ºêÆ®¸®¿¡ »ğÀÔ
+		node->setLeftNode(insertRecursive(node->leftNode(), key));
 	}
 	else if (key > node->key()) {
-		node->setRightNode(insertRecursive(node->rightNode(), key)); // Å°°¡ ÇöÀç ³ëµåÀÇ Å°º¸´Ù Å©¸é ¿À¸¥ÂÊ ¼­ºêÆ®¸®¿¡ »ğÀÔ
+		node->setRightNode(insertRecursive(node->rightNode(), key));
 	}
 	else {
-		return node; // Áßº¹µÈ Å°°ªÀº Çã¿ëÇÏÁö ¾ÊÀ¸¹Ç·Î »ğÀÔÇÏÁö ¾ÊÀ½
+		return node;
 	}
 
-	// ÀÌ ³ëµåÀÇ ³ôÀÌ ¾÷µ¥ÀÌÆ®
-	node->setHeight(1 + max(node->leftNode() ? node->leftNode()->height() : 0,
-		node->rightNode() ? node->rightNode()->height() : 0));
+	node->setHeight(1 + max(node->leftNode()->height(), node->rightNode()->height())); // ë…¸ë“œ ë†’ì´ ê°±ì‹ 
+	int balance = getBalance(node); // ë…¸ë“œ ë°¸ëŸ°ìŠ¤ ìœ ì§€
 
-	// ÀÌ ³ëµåÀÇ ¹ë·±½º È®ÀÎ
-	int balance = getBalance(node);
-
-	// È¸Àü ·ÎÁ÷ ±¸Çö (³ëµå ¹ë·±½º ±úÁ³À» °æ¿ì)
-	// LL (Left Left)
+	// LL (Left Left, right rotation ìˆ˜í–‰í•˜ì—¬ ê· í˜•ì„ ë§ì¶¤)
 	if (balance > 1 && key < node->leftNode()->key()) {
 		return rotateRight(node); // LL rotate
 	}
 
-	// RR (Right Right)
+	// RR (Right Right, left rotation ìˆ˜í–‰í•˜ì—¬ ê· í˜•ì„ ë§ì¶¤)
 	if (balance < -1 && key > node->rightNode()->key())
 		return rotateLeft(node); // RR rotate
 
-	// LR (Left Right)
+	// LR (Left Right ìˆœìœ¼ë¡œ ì´ ë‘ë²ˆì˜ rotation ìˆ˜í–‰í•˜ì—¬ ê· í˜•ì„ ë§ì¶¤)
 	if (balance > 1 && key > node->leftNode()->key()) {
-		node->setLeftNode(rotateLeft(node->leftNode())); // ¿ŞÂÊ ÀÚ½ÄÀ» ±âÁØÀ¸·Î ¿ŞÂÊ È¸Àü ÈÄ
-		return rotateRight(node); // ÇöÀç ³ëµå¸¦ ±âÁØÀ¸·Î ¿À¸¥ÂÊ È¸Àü
+		node->setLeftNode(rotateLeft(node->leftNode()));
+		return rotateRight(node);
 	}
-	// RL (Right Left)
+	// RL (Right, Left ìˆœìœ¼ë¡œ ì´ ë‘ë²ˆì˜ rotation ìˆ˜í–‰í•˜ì—¬ ê· í˜•ì„ ë§ì¶¤)
 	if (balance < -1 && key < node->rightNode()->key()) {
-		node->setRightNode(rotateRight(node->rightNode())); // ¿À¸¥ÂÊ ÀÚ½Ä ±âÁØÀ¸·Î ¿À¸¥ÂÊ È¸Àü ÈÄ
-		return rotateLeft(node); // ÇöÀç ³ëµå ±âÁØÀ¸·Î ¿ŞÂÊ È¸Àü ¼öÇà
+		node->setRightNode(rotateRight(node->rightNode()));
+		return rotateLeft(node);
 	}
-	return node; // º¯°æµÇÁö ¾ÊÀº ³ëµå Æ÷ÀÎÅÍ ¸®ÅÏ
+	return node;
 }
 int AVLTree::erase(int key) {
-	return NULL;
+	return 0;
 }
 bool AVLTree::empty() {
 	return root_ == nullptr;
@@ -70,61 +98,19 @@ int AVLTree::size() {
 	return total_node_cnt_;
 }
 int AVLTree::find(int key) {
+	return 0;
+}
+TreeNode* AVLTree::findNode(int key) {
 	return NULL;
 }
-AVLNode* AVLTree::findNode(int key) {
-	return NULL;
+
+pair<int,int> AVLTree::minimum(int key)  {
+	return {0,0};
 }
-int AVLTree::minimum(int key) {
-	return NULL;
-}
-int AVLTree::maximum(int key) {
-	return NULL;
+pair<int,int> AVLTree::maximum(int key) {
+	return {0,0};
 }
 int AVLTree::rank(int key) {
-	return NULL;
+	return 0;
 }
-// node¸¦ ±âÁØÀ¸·Î ¿À¸¥ÂÊÀ¸·Î È¸Àü
-AVLNode AVLTree:: rotateRight(AVLNode* y) { // node¸¦ ±âÁØÀ¸·Î ¿À¸¥ÂÊÀ¸·Î È¸ÀüÇÏ´Â ¸Ş¼­µå
-	AVLNode* x = y->leftNode(); // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» x·Î ¼³Á¤
-	AVLNode* z = x->rightNode(); // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
 
-	// È¸Àü ¼öÇà
-	x->setRightNode(y); // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» y·Î ¼³Á¤
-	y->setLeftNode(z); // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
-
-	// ³ôÀÌ ¾÷µ¥ÀÌÆ®
-	// yÀÇ ¿ŞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä Áß ´õ ³ôÀº Å°°ªÀ» °¡Áø ÀÚ½ÄÀÇ ³ôÀÌ¸¦ Ã£¾Æ yÀÇ ³ôÀÌ¸¦ ¼³Á¤
-	int yLeftHeight = y->leftNode() ? y->leftNode()->height() : 0; // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	int yRightHeight = y->rightNode() ? y->rightNode()->height() : 0; // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	y->setHeight((yLeftHeight > yRightHeight ? yLeftHeight : yRightHeight) + 1); // ´õ ³ôÀº ³ôÀÌ¿¡ 1À» ´õÇØ ³ôÀÌ¸¦ ¾÷µ¥ÀÌÆ®
-
-	// xÀÇ ¿ŞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä Áß ´õ ³ôÀº ÀÚ½ÄÀÇ ³ôÀÌ¸¦ Ã£¾Æ xÀÇ ³ôÀÌ¸¦ ¼³Á¤
-	int xLeftHeight = x->leftNode() ? x->leftNode()->height() : 0; // xÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	int xRightHeight = x->rightNode() ? x->rightNode()->height() : 0; // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	x->setHeight((xLeftHeight > xRightHeight ? xLeftHeight : xRightHeight) + 1); // ´õ ³ôÀº ³ôÀÌ¿¡ 1À» ´õÇØ xÀÇ ³ôÀÌ¸¦ ¾÷µ¥ÀÌÆ®
-
-	// »õ·Î¿î ·çÆ® ³ëµå ¸®ÅÏ
-	return x;
-}
-// node¸¦ ±âÁØÀ¸·Î ¿ŞÂÊÀ¸·Î È¸Àü
-AVLNode AVLTree:: rotateLeft(AVLNode* x) {
-	AVLNode* y = x->rightNode(); // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» y·Î ¼³Á¤
-	AVLNode* z = y->leftNode(); // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
-
-	// È¸Àü ¼öÇà
-	y->setLeftNode(x); // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» x·Î ¼³Á¤
-	x->setRightNode(z); // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» z·Î ¼³Á¤
-
-	// ³ôÀÌ ¾÷µ¥ÀÌÆ®
-	// xÀÇ ¿ŞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä Áß ´õ ³ôÀº ÀÚ½ÄÀÇ ³ôÀÌ¸¦ Ã£¾Æ xÀÇ ³ôÀÌ¸¦ ¼³Á¤
-	int xLeftHeight = x->leftNode() ? x->leftNode()->height() : 0; // xÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	int xRightHeight = x->rightNode() ? x->rightNode()->height() : 0; // xÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	x->setHeight((xLeftHeight > xRightHeight ? xLeftHeight : xRightHeight) + 1); // ´õ ³ôÀº ³ôÀÌ¿¡ 1À» ´õÇØ xÀÇ ³ôÀÌ¸¦ ¾÷µ¥ÀÌÆ®
-
-	// yÀÇ ¿ŞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä Áß ´õ ³ôÀº ÀÚ½ÄÀÇ ³ôÀÌ¸¦ Ã£¾Æ yÀÇ ³ôÀÌ¸¦ ¼³Á¤
-	int yLeftHeight = y->leftNode() ? y->leftNode() ? y->leftNode()->height() : 0; // yÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	int rRightHeight = y->rightNode() ? y->rightNode()->height() : 0; // yÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ³ôÀÌ
-	y->setHeight((yLeftHeight > xRightHeight ? yLeftHeight : xRightHeight) + 1); // ´õ ³ôÀº ³ôÀÌ¿¡ 1À» ´õÇØ yÀÇ ³ôÀÌ¸¦ ¾÷µ¥ÀÌÆ®
-	return y; // »õ·Î¿î ·çÆ® ³ëµåÀÎ y¸¦ ¹İÈ¯
-}
