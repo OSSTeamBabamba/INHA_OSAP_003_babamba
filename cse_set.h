@@ -3,19 +3,16 @@
 
 class Set {
 public:
-    bool empty();
-    int size();
-    int erase(int key);
-    int insert(int key);
-    int find(int key);
-    int minimum(int key);
-    int maximum(int key);
-    int rank(int key);
-
-private:
-
+//    virtual bool Empty() = 0;
+//    virtual int Size() = 0;
+//    virtual int Erase(int key) = 0;
+    virtual int insert(int key) = 0;
+//    virtual int Find(int key) = 0;
+//    virtual int Minimum(int key) = 0;
+//    virtual int Maximum(int key) = 0;
+//    virtual int Rank(int key) = 0;
 
 };
 
-#endif AVLTREE_CSE_SET_H
+#endif
 
