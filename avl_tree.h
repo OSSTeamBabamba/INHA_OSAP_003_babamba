@@ -4,6 +4,7 @@
 #include "tree_node.h"
 #include<iostream>
 #include<utility>
+#include <cstdint>
 #include "tree.h"
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
 	int rank(int key);
 	TreeNode* rotateRight(TreeNode* node);
 	TreeNode* rotateLeft(TreeNode* node);
+
 private:
 	TreeNode* root_;
 	int32_t total_node_cnt_;

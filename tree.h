@@ -2,6 +2,7 @@
 #define AVLTREESTL_TREE_H
 
 #include "tree_node.h"
+#include "node.h"
 
 class Tree {
 public:

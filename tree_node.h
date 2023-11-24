@@ -1,8 +1,6 @@
 #ifndef TREE_NODE_H
 #define TREE_NODE_H
 
-#include "avl_tree.h"
-#include "avl_node.h"
 #include "node.h"
 #include <cstdint>
 

@@ -1,6 +1,5 @@
 #include "avl_tree.h"
 #include "tree_node.h"
-#include "tree.h"
 #include<algorithm>
 using namespace std;
 

@@ -1,6 +1,4 @@
 #include "tree_node.h"
-#include "avl_node.h"
-#include "node.h"
 using namespace std;
 
 int32_t TreeNode::depth() const {
