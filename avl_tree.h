@@ -12,7 +12,6 @@ class AVLTree : public Set, public Tree {
 public:
     int getBalance(TreeNode* node); // 균형이 깨졌는지 check
     int insert(int key);
-    TreeNode* insertRecursive(TreeNode* node, int key);
     int erase(int key);
     bool empty();
     int size();
@@ -22,6 +21,8 @@ public:
     int rank(int key);
     TreeNode* rotateRight(TreeNode* node);
     TreeNode* rotateLeft(TreeNode* node);
+
+    //TODO: 테스트 이후 제거될 기능
     void inorderTraversal(TreeNode* node);
     TreeNode* getRoot(){
         return root_;
@@ -30,6 +31,7 @@ private:
     TreeNode* root_;
     int32_t total_node_cnt_;
     TreeNode* findNode(int key);
+    TreeNode* insertRecursive(TreeNode* node, int key);
 
 };
 #endif//AVLTREE_AVL_TREE_H
