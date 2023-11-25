@@ -31,6 +31,5 @@ private:
     TreeNode* root_;
     int32_t total_node_cnt_;
     TreeNode* findNode(int key);
-    void setDepth(int key);
 };
 #endif//AVLTREE_AVL_TREE_H

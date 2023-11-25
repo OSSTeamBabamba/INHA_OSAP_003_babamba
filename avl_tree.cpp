@@ -119,45 +119,28 @@ int AVLTree::find(int key) {
     else
         return -1;
 }
+
 TreeNode* AVLTree::findNode(int key) {
     TreeNode* current = root_;
     current->setDepth(0);
 
     while (current != nullptr) {
-        int temp = current->depth();
+        int temp = current->depth(); // 현재 노드의 깊이를 저장
         if (key < current->key()) {
-            current = current->leftNode();
-            if(current != nullptr)
-                current->setDepth(temp+1);
+            current = current->leftNode(); // 왼쪽 자식 노드로 이동
+            if (current != nullptr)
+                current->setDepth(temp + 1); // 현재 노드의 깊이 갱신
+        } else if (key > current->key()) {
+            current = current->rightNode(); // 오른쪽 자식 노드로 이동
+            if (current != nullptr)
+                current->setDepth(temp + 1); // 현재 노드의 깊이 갱신
+        } else {
+            return current; // 노드를 찾았을 때 반환
         }
-        else if (key > current->key()) {
-            current = current->rightNode();
-            if(current != nullptr)
-                current->setDepth(temp+1);
-        }
-        else { return current; }
     }
-    return nullptr;
+    return nullptr; // 노드를 찾지 못한 경우 nullptr 반환
 }
-void AVLTree::setDepth(int key) {
-    TreeNode* current = root_;
-    current->setDepth(0);
 
-    while (current != nullptr) {
-        int temp = current->depth();
-        if (key < current->key())
-            current = current->leftNode();
-            if(current != nullptr)
-                current->setDepth(temp+1);
-        else if (key > current->key())
-            current = current->rightNode();
-            if(current != nullptr)
-                current->setDepth(temp+1);
-        else
-            return;
-    }
-    return;
-}
 
 pair<int,int> AVLTree::minimum(int key)  {
     return {0,0};
@@ -168,21 +151,26 @@ pair<int,int> AVLTree::maximum(int key) {
 int AVLTree::rank(int key) {
     return rankRecursive(root_, key);
 }
+
 int AVLTree::rankRecursive(TreeNode* node, int key) {
     if (node == nullptr) {
-        return 0;
+        return 0; // 노드가 없으면 0 반환
     }
 
-    int leftCount = rankRecursive(node->leftNode(), key);
-    int rightCount = rankRecursive(node->rightNode(), key);
+    int leftCount = rankRecursive(node->leftNode(), key); // 왼쪽 서브트리의 랭크 계산
+    int rightCount = rankRecursive(node->rightNode(), key); // 오른쪽 서브트리의 랭크 계산
 
     if (key >= node->key()) {
+        // 현재 노드의 키가 주어진 키보다 작거나 같으면
+        // 왼쪽 서브트리의 랭크, 오른쪽 서브트리의 랭크, 현재 노드를 포함한 1을 더한 값을 반환
         return leftCount + rightCount + 1;
-    }
-    else {
+    } else {
+        // 현재 노드의 키가 주어진 키보다 크면
+        // 왼쪽 서브트리의 랭크를 반환
         return leftCount;
     }
 }
+
 
 void AVLTree::inorderTraversal(TreeNode* node){
     if(node == nullptr) return;
