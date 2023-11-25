@@ -113,23 +113,50 @@ int AVLTree::size() {
     return total_node_cnt_;
 }
 int AVLTree::find(int key) {
-    AVLNode* node = findNode(key);
+    TreeNode* node = findNode(key);
     if (node != nullptr)
-        return node->key();
+        return node->depth();
     else
         return -1;
 }
-AVLNode* AVLTree::findNode(int key) {
-    AVLNode* current = root_;
+TreeNode* AVLTree::findNode(int key) {
+    TreeNode* current = root_;
+    current->setDepth(0);
+
     while (current != nullptr) {
-        if (key < current->key())
+        int temp = current->depth();
+        if (key < current->key()) {
             current = current->leftNode();
-        else if (key > current->key())
+            if(current != nullptr)
+                current->setDepth(temp+1);
+        }
+        else if (key > current->key()) {
             current = current->rightNode();
-        else
-            return current;
+            if(current != nullptr)
+                current->setDepth(temp+1);
+        }
+        else { return current; }
     }
     return nullptr;
+}
+void AVLTree::setDepth(int key) {
+    TreeNode* current = root_;
+    current->setDepth(0);
+
+    while (current != nullptr) {
+        int temp = current->depth();
+        if (key < current->key())
+            current = current->leftNode();
+            if(current != nullptr)
+                current->setDepth(temp+1);
+        else if (key > current->key())
+            current = current->rightNode();
+            if(current != nullptr)
+                current->setDepth(temp+1);
+        else
+            return;
+    }
+    return;
 }
 
 pair<int,int> AVLTree::minimum(int key)  {
@@ -141,7 +168,7 @@ pair<int,int> AVLTree::maximum(int key) {
 int AVLTree::rank(int key) {
     return rankRecursive(root_, key);
 }
-int AVLTree::rankRecursive(AVLNode* node, int key) {
+int AVLTree::rankRecursive(TreeNode* node, int key) {
     if (node == nullptr) {
         return 0;
     }
