@@ -22,6 +22,7 @@ public:
     int rank(int key);
     TreeNode* rotateRight(TreeNode* node);
     TreeNode* rotateLeft(TreeNode* node);
+    int rankRecursive(TreeNode* node, int key);
     void inorderTraversal(TreeNode* node);
     TreeNode* getRoot(){
         return root_;
@@ -30,6 +31,5 @@ private:
     TreeNode* root_;
     int32_t total_node_cnt_;
     TreeNode* findNode(int key);
-
 };
 #endif//AVLTREE_AVL_TREE_H
