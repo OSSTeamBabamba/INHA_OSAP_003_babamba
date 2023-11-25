@@ -104,8 +104,98 @@ TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
     return node;
 }
 int AVLTree::erase(int key) {
+  if(eraseRecursive(root_,key)==nullptr)
+    return -1;
+  else{
     return 0;
+  }
 }
+
+TreeNode* AVLTree::eraseRecursive(TreeNode* node, int key){
+//삭제 확인 대상 node가 nullptr 일경우
+  if(node== nullptr){
+    return node;
+  }
+// 삭제확인 대상 node가 삭제하려는 key보다 클경우 좌측 자식노드으로 이동
+  if(key < node->key()){
+    node->setLeftNode(eraseRecursive(node->leftNode(),key));
+  }
+  // 삭제확인 대상 node가 삭제하려는 key보다 작을경우 우측 자식노드으로 이동
+  else if(key > node->key()){
+    node->setRightNode(eraseRecursive(node->rightNode(),key));
+  }
+  // 삭제확인 대상 node와 일치시
+  else{
+    //노드가 한쪽혹은 아예 없을경우
+    if(node->leftNode() == nullptr ||
+        node->rightNode() == nullptr){
+
+      //둘중 하나라도 nullptr일경우 nullptr이 아닌 것을 선택
+      TreeNode* temp = node->leftNode() ? node->leftNode() : node->rightNode();
+
+      //둘다 nullptr일 경우
+      if(temp == nullptr){
+        temp = node;
+        node = nullptr;
+      }
+      else{
+        *node = *temp;
+      }
+
+      delete temp;
+    }
+    //노드가 좌우로 달려있을경우
+    else{
+
+      TreeNode* temp = node->rightNode();
+
+      while (temp->leftNode() != nullptr) {
+        temp = temp->leftNode();
+      }
+
+      node->setKey(temp->key());
+      node->setRightNode(eraseRecursive(node->rightNode(),temp->key()));
+
+    }
+  }
+
+  if (node == nullptr){
+    return node;
+  }
+
+  //TODO: insert 함수와 중복됨 해당 기능 함수와 필요가 있음
+  // 트리 안정화 작업
+
+  int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : 0;
+  int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
+  node->setHeight(1 + max(leftHeight, rightHeight));
+
+  int balance = getBalance(node); // 노드 밸런스 유지
+
+  // LL (Left Left, right rotation 수행하여 균형을 맞춤)
+  if (balance > 1 && key < node->leftNode()->key()) {
+    return rotateRight(node); // LL rotate
+  }
+
+  // RR (Right Right, left rotation 수행하여 균형을 맞춤)
+  if (balance < -1 && key > node->rightNode()->key())
+    return rotateLeft(node); // RR rotate
+
+  // LR (Left Right 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
+  if (balance > 1 && key > node->leftNode()->key()) {
+    node->setLeftNode(rotateLeft(node->leftNode()));
+    return rotateRight(node);
+  }
+  // RL (Right, Left 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
+  if (balance < -1 && key < node->rightNode()->key()) {
+    node->setRightNode(rotateRight(node->rightNode()));
+    return rotateLeft(node);
+  }
+
+  return node;
+
+}
+
 bool AVLTree::empty() {
     return root_ == nullptr;
 }
@@ -129,6 +219,7 @@ int AVLTree::rank(int key) {
     return 0;
 }
 
+//TODO: 테스트 이후 제거될 기능
 void AVLTree::inorderTraversal(TreeNode* node){
     if(node == nullptr) return;
     inorderTraversal(node->leftNode());

@@ -32,6 +32,8 @@ private:
     int32_t total_node_cnt_;
     TreeNode* findNode(int key);
     TreeNode* insertRecursive(TreeNode* node, int key);
+    TreeNode* eraseRecursive(TreeNode* node, int key);
+
 
 };
 #endif//AVLTREE_AVL_TREE_H
