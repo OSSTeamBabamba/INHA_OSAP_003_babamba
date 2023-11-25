@@ -113,10 +113,23 @@ int AVLTree::size() {
     return total_node_cnt_;
 }
 int AVLTree::find(int key) {
-    return 0;
+    AVLNode* node = findNode(key);
+    if (node != nullptr)
+        return node->key();
+    else
+        return -1;
 }
-TreeNode* AVLTree::findNode(int key) {
-    return NULL;
+AVLNode* AVLTree::findNode(int key) {
+    AVLNode* current = root_;
+    while (current != nullptr) {
+        if (key < current->key())
+            current = current->leftNode();
+        else if (key > current->key())
+            current = current->rightNode();
+        else
+            return current;
+    }
+    return nullptr;
 }
 
 pair<int,int> AVLTree::minimum(int key)  {
@@ -126,7 +139,22 @@ pair<int,int> AVLTree::maximum(int key) {
     return {0,0};
 }
 int AVLTree::rank(int key) {
-    return 0;
+    return rankRecursive(root_, key);
+}
+int AVLTree::rankRecursive(AVLNode* node, int key) {
+    if (node == nullptr) {
+        return 0;
+    }
+
+    int leftCount = rankRecursive(node->leftNode(), key);
+    int rightCount = rankRecursive(node->rightNode(), key);
+
+    if (key >= node->key()) {
+        return leftCount + rightCount + 1;
+    }
+    else {
+        return leftCount;
+    }
 }
 
 void AVLTree::inorderTraversal(TreeNode* node){

@@ -22,6 +22,7 @@ public:
     int rank(int key);
     TreeNode* rotateRight(TreeNode* node);
     TreeNode* rotateLeft(TreeNode* node);
+    int rankRecursive(TreeNode* node, int key);
     void inorderTraversal(TreeNode* node);
     TreeNode* getRoot(){
         return root_;
