@@ -20,6 +20,7 @@ public:
     pair<int, int> minimum(int key);
     pair<int, int> maximum(int key);
     int rank(int key);
+
     TreeNode* rotateRight(TreeNode* node);
     TreeNode* rotateLeft(TreeNode* node);
     int rankRecursive(TreeNode* node, int key);
@@ -31,5 +32,6 @@ private:
     TreeNode* root_;
     int32_t total_node_cnt_;
     TreeNode* findNode(int key);
+    TreeNode* balancing(TreeNode* node, int key);
 };
 #endif//AVLTREE_AVL_TREE_H

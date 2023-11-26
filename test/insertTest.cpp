@@ -18,7 +18,6 @@ int main(){
 
     avltree->inorderTraversal(avltree->getRoot());
 
-
     delete avltree;
     return 0;
 }
