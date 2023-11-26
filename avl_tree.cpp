@@ -55,12 +55,12 @@ TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노�
 
 int AVLTree::insert(int key) {
 
-    root_ = insertRecursive(root_, key);
+    root_ = insertRecursive(root_, key); // 루트에서부터 시작해 재귀적으로 키 값 삽입
     return root_ ? root_->height() : -1;
 
 }
 TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
-    if (node == nullptr) {
+    if (node == nullptr) { // 노드가 널포인터 값일 경우 전체 노드의 개수를 1 증가시키고, TreeNode 생성
         ++total_node_cnt_;
         return new TreeNode(key, nullptr, nullptr, nullptr);
     }
@@ -79,7 +79,7 @@ TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
 
     return balancing(node, key);
 }
-TreeNode* AVLTree::balancing(TreeNode* node, int key) {
+TreeNode* AVLTree::balancing(TreeNode* node, int key) { // BF를 이용해 회전로직을 구현
     int balance = getBalance(node); // 노드 밸런스 유지
 
     // LL (Left Left, right rotation 수행하여 균형을 맞춤)
@@ -171,7 +171,7 @@ int AVLTree::rankRecursive(TreeNode* node, int key) {
 }
 
 
-void AVLTree::inorderTraversal(TreeNode* node){
+void AVLTree::inorderTraversal(TreeNode* node){ // 왼쪽 자식 -> 루트 -> 오른쪽 자식 순으로 중위순회 수행
     if(node == nullptr) return;
     inorderTraversal(node->leftNode());
 
