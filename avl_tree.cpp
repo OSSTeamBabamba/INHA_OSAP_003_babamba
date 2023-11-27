@@ -146,6 +146,7 @@ TreeNode* AVLTree::eraseRecursive(TreeNode* node, int key){
       }
       else{
         *node = *temp;
+        this->total_node_cnt_ -= 1;
       }
 
       delete temp;
