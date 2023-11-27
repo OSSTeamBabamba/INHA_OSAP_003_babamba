@@ -237,8 +237,8 @@ pair<int,int> AVLTree::Minimum(int key)  {
 pair<int,int> AVLTree::Maximum(int key) {
     return {0,0};
 }
-int AVLTree::Rank(int key) {
-    return RankRecursive(root_, key);
+pair<int,int> AVLTree::Rank(int key) {
+    return {Find(key), RankRecursive(root_, key)};
 }
 
 int AVLTree::RankRecursive(TreeNode* node, int key) {
