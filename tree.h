@@ -6,12 +6,12 @@
 
 class Tree {
 public:
-    int insert(int key);
-    int erase(int key);
-    bool empty();
-    int size();
-    int find(int key);
-    int rank(int key);
+    int Insert(int key);
+    int Erase(int key);
+    bool Empty();
+    int Size();
+    int Find(int key);
+    int Rank(int key);
 
 protected:
     TreeNode* root_;

@@ -4,10 +4,10 @@
 
 class Node{
 public:
+ Node(int32_t key): key_(key){}
+
     int32_t key() const;
     void setKey(int32_t key);
-public:
-    Node(int32_t key): key_(key){}
 
 protected:
     int32_t key_;
