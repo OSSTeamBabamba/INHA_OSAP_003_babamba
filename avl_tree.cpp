@@ -79,6 +79,7 @@ TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
 
     return balancing(node, key);
 }
+
 TreeNode* AVLTree::balancing(TreeNode* node, int key) { // BF를 이용해 회전로직을 구현
     int balance = getBalance(node); // 노드 밸런스 유지
 
@@ -104,8 +105,16 @@ TreeNode* AVLTree::balancing(TreeNode* node, int key) { // BF를 이용해 회�
     return node;
 }
 int AVLTree::erase(int key) {
+
+  TreeNode* targetNode = findNode(key);
+  if(targetNode == nullptr){
     return 0;
+  }else{
+    int target_depth = targetNode->depth();
+    eraseRecursive(root_,key);
+    return target_depth;
   }
+
 }
 
 TreeNode* AVLTree::eraseRecursive(TreeNode* node, int key){
@@ -167,29 +176,8 @@ TreeNode* AVLTree::eraseRecursive(TreeNode* node, int key){
   int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
   node->setHeight(1 + max(leftHeight, rightHeight));
 
-  int balance = getBalance(node); // 노드 밸런스 유지
 
-  // LL (Left Left, right rotation 수행하여 균형을 맞춤)
-  if (balance > 1 && key < node->leftNode()->key()) {
-    return rotateRight(node); // LL rotate
-  }
-
-  // RR (Right Right, left rotation 수행하여 균형을 맞춤)
-  if (balance < -1 && key > node->rightNode()->key())
-    return rotateLeft(node); // RR rotate
-
-  // LR (Left Right 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
-  if (balance > 1 && key > node->leftNode()->key()) {
-    node->setLeftNode(rotateLeft(node->leftNode()));
-    return rotateRight(node);
-  }
-  // RL (Right, Left 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
-  if (balance < -1 && key < node->rightNode()->key()) {
-    node->setRightNode(rotateRight(node->rightNode()));
-    return rotateLeft(node);
-  }
-
-  return node;
+  return balancing(node,key);
 
 }
 
