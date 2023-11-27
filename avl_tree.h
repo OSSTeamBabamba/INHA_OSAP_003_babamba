@@ -21,8 +21,7 @@ public:
     int rank(int key);
     TreeNode* rotateRight(TreeNode* node);
     TreeNode* rotateLeft(TreeNode* node);
-
-    //TODO: 테스트 이후 제거될 기능
+    int rankRecursive(TreeNode* node, int key);
     void inorderTraversal(TreeNode* node);
     TreeNode* getRoot(){
         return root_;
@@ -33,7 +32,6 @@ private:
     TreeNode* findNode(int key);
     TreeNode* insertRecursive(TreeNode* node, int key);
     TreeNode* eraseRecursive(TreeNode* node, int key);
-
-
+    TreeNode* balancing(TreeNode* node, int key);
 };
 #endif//AVLTREE_AVL_TREE_H
