@@ -11,7 +11,7 @@ int AVLTree::getBalance(TreeNode* node) { // Balance Factor(BF) 계산하는 함
     return leftNodeBalancedFactor - rightNodeBalancedFactor; // 좌우 자식 깊이를 비교해 BF 리턴
 }
 
-TreeNode* AVLTree:: rotateRight(TreeNode* z) { // y는 z의 왼쪽 자식 노드, x는 y의 왼쪽 자식 노드로 설정, z를 중심으로 오른쪽 회전
+TreeNode* AVLTree:: RotateRight(TreeNode* z) { // y는 z의 왼쪽 자식 노드, x는 y의 왼쪽 자식 노드로 설정, z를 중심으로 오른쪽 회전
     TreeNode *y = z->leftNode();
     TreeNode *T2 = y->rightNode(); // T2는 y의 오른쪽 자식
 
@@ -32,7 +32,7 @@ TreeNode* AVLTree:: rotateRight(TreeNode* z) { // y는 z의 왼쪽 자식 노드
     return y;
 }
 
-TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노드이고, x는 오른쪽 자식 노드인 경우 z를 중심으로 왼쪽 회전
+TreeNode* AVLTree:: RotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노드이고, x는 오른쪽 자식 노드인 경우 z를 중심으로 왼쪽 회전
     TreeNode *y = z->rightNode();
     TreeNode *T2 = y->leftNode();
 
@@ -53,21 +53,21 @@ TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노�
     return y;
 }
 
-int AVLTree::insert(int key) {
+int AVLTree::Insert(int key) {
 
-    root_ = insertRecursive(root_, key); // 루트에서부터 시작해 재귀적으로 키 값 삽입
-    return root_ ? root_->height() : -1;
+    root_ = InsertRecursive(root_, key); // 루트에서부터 시작해 재귀적으로 키 값 삽입
+    return Find(key);
 
 }
-TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
+TreeNode* AVLTree:: InsertRecursive(TreeNode* node, int key) {
     if (node == nullptr) { // 노드가 널포인터 값일 경우 전체 노드의 개수를 1 증가시키고, TreeNode 생성
         ++total_node_cnt_;
         return new TreeNode(key, nullptr, nullptr, nullptr);
     }
     if (key < node->key()) {
-        node->setLeftNode(insertRecursive(node->leftNode(), key));
+        node->setLeftNode(InsertRecursive(node->leftNode(), key));
     } else if (key > node->key()) {
-        node->setRightNode(insertRecursive(node->rightNode(), key));
+        node->setRightNode(InsertRecursive(node->rightNode(), key));
     } else {
         return node;
     }
@@ -77,50 +77,126 @@ TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
 
     node->setHeight(1 + max(leftHeight, rightHeight));
 
-    return balancing(node, key);
+    return Balancing(node, key);
 }
-TreeNode* AVLTree::balancing(TreeNode* node, int key) { // BF를 이용해 회전로직을 구현
+
+TreeNode* AVLTree::Balancing(TreeNode* node, int key) { // BF를 이용해 회전로직을 구현
     int balance = getBalance(node); // 노드 밸런스 유지
 
     // LL (Left Left, right rotation 수행하여 균형을 맞춤)
     if (balance > 1 && key < node->leftNode()->key()) {
-        node = rotateRight(node);
+        node = RotateRight(node);
     }
 
     // RR (Right Right, left rotation 수행하여 균형을 맞춤)
     if (balance < -1 && key > node->rightNode()->key())
-        node = rotateLeft(node);
+        node = RotateLeft(node);
 
     // LR (Left Right 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
     if (balance > 1 && key > node->leftNode()->key()) {
-        node->setLeftNode(rotateLeft(node->leftNode()));
-        node =  rotateRight(node);
+        node->setLeftNode(RotateLeft(node->leftNode()));
+        node =  RotateRight(node);
     }
     // RL (Right, Left 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
     if (balance < -1 && key < node->rightNode()->key()) {
-        node->setRightNode(rotateRight(node->rightNode()));
-        node= rotateLeft(node);
+        node->setRightNode(RotateRight(node->rightNode()));
+        node= RotateLeft(node);
     }
     return node;
 }
-int AVLTree::erase(int key) {
+int AVLTree::Erase(int key) {
+
+  TreeNode* targetNode = FindNode(key);
+  if(targetNode == nullptr){
     return 0;
+  }else{
+    int target_depth = targetNode->depth();
+    EraseRecursive(root_,key);
+    return target_depth;
+  }
+
 }
-bool AVLTree::empty() {
+
+TreeNode* AVLTree::EraseRecursive(TreeNode* node, int key){
+//삭제 확인 대상 node가 nullptr 일경우
+  if(node== nullptr){
+    return node;
+  }
+// 삭제확인 대상 node가 삭제하려는 key보다 클경우 좌측 자식노드으로 이동
+  if(key < node->key()){
+    node->setLeftNode(EraseRecursive(node->leftNode(),key));
+  }
+  // 삭제확인 대상 node가 삭제하려는 key보다 작을경우 우측 자식노드으로 이동
+  else if(key > node->key()){
+    node->setRightNode(EraseRecursive(node->rightNode(),key));
+  }
+  // 삭제확인 대상 node와 일치시
+  else{
+    //노드가 한쪽혹은 아예 없을경우
+    if(node->leftNode() == nullptr ||
+        node->rightNode() == nullptr){
+
+      //둘중 하나라도 nullptr일경우 nullptr이 아닌 것을 선택
+      TreeNode* temp = node->leftNode() ? node->leftNode() : node->rightNode();
+
+      //둘다 nullptr일 경우
+      if(temp == nullptr){
+        temp = node;
+        node = nullptr;
+      }
+      else{
+        *node = *temp;
+        this->total_node_cnt_ -= 1;
+      }
+
+      delete temp;
+    }
+    //노드가 좌우로 달려있을경우
+    else{
+
+      TreeNode* temp = node->rightNode();
+
+      while (temp->leftNode() != nullptr) {
+        temp = temp->leftNode();
+      }
+
+      node->setKey(temp->key());
+      node->setRightNode(EraseRecursive(node->rightNode(),temp->key()));
+
+    }
+  }
+
+  if (node == nullptr){
+    return node;
+  }
+
+  //TODO: insert 함수와 중복됨 해당 기능 함수와 필요가 있음
+  // 트리 안정화 작업
+
+  int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : 0;
+  int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
+  node->setHeight(1 + max(leftHeight, rightHeight));
+
+
+  return Balancing(node,key);
+
+}
+
+bool AVLTree::Empty() {
     return root_ == nullptr;
 }
-int AVLTree::size() {
+int AVLTree::Size() {
     return total_node_cnt_;
 }
-int AVLTree::find(int key) {
-    TreeNode* node = findNode(key);
+int AVLTree::Find(int key) {
+    TreeNode* node = FindNode(key);
     if (node != nullptr)
         return node->depth();
     else
         return -1;
 }
 
-TreeNode* AVLTree::findNode(int key) {
+TreeNode* AVLTree::FindNode(int key) {
     TreeNode* current = root_;
     current->setDepth(0);
 
@@ -141,23 +217,23 @@ TreeNode* AVLTree::findNode(int key) {
     return nullptr; // 노드를 찾지 못한 경우 nullptr 반환
 }
 
-pair<int,int> AVLTree::minimum(int key)  {
+pair<int,int> AVLTree::Minimum(int key)  {
     return {0,0};
 }
-pair<int,int> AVLTree::maximum(int key) {
+pair<int,int> AVLTree::Maximum(int key) {
     return {0,0};
 }
-int AVLTree::rank(int key) {
-    return rankRecursive(root_, key);
+int AVLTree::Rank(int key) {
+    return RankRecursive(root_, key);
 }
 
-int AVLTree::rankRecursive(TreeNode* node, int key) {
+int AVLTree::RankRecursive(TreeNode* node, int key) {
     if (node == nullptr) {
         return 0; // 노드가 없으면 0 반환
     }
 
-    int leftCount = rankRecursive(node->leftNode(), key); // 왼쪽 서브트리의 랭크 계산
-    int rightCount = rankRecursive(node->rightNode(), key); // 오른쪽 서브트리의 랭크 계산
+    int leftCount = RankRecursive(node->leftNode(), key); // 왼쪽 서브트리의 랭크 계산
+    int rightCount = RankRecursive(node->rightNode(), key); // 오른쪽 서브트리의 랭크 계산
 
     if (key >= node->key()) {
         // 현재 노드의 키가 주어진 키보다 작거나 같으면
@@ -171,11 +247,11 @@ int AVLTree::rankRecursive(TreeNode* node, int key) {
 }
 
 
-void AVLTree::inorderTraversal(TreeNode* node){ // 왼쪽 자식 -> 루트 -> 오른쪽 자식 순으로 중위순회 수행
+void AVLTree::InorderTraversal(TreeNode* node){ // 왼쪽 자식 -> 루트 -> 오른쪽 자식 순으로 중위순회 수행
     if(node == nullptr) return;
-    inorderTraversal(node->leftNode());
+    InorderTraversal(node->leftNode());
 
     cout<<node->key()<<" ";
 
-    inorderTraversal(node->rightNode());
+    InorderTraversal(node->rightNode());
 }

@@ -11,27 +11,28 @@ using namespace std;
 class AVLTree : public Set, public Tree {
 public:
     int getBalance(TreeNode* node); // 균형이 깨졌는지 check
-    int insert(int key);
-    TreeNode* insertRecursive(TreeNode* node, int key);
-    int erase(int key);
-    bool empty();
-    int size();
-    int find(int key);
-    pair<int, int> minimum(int key);
-    pair<int, int> maximum(int key);
-    int rank(int key);
+    int Insert(int key);
+    int Erase(int key);
+    bool Empty();
+    int Size();
+    int Find(int key);
+    pair<int, int> Minimum(int key);
+    pair<int, int> Maximum(int key);
+    int Rank(int key);
 
-    TreeNode* rotateRight(TreeNode* node);
-    TreeNode* rotateLeft(TreeNode* node);
-    int rankRecursive(TreeNode* node, int key);
-    void inorderTraversal(TreeNode* node);
-    TreeNode* getRoot(){
+    TreeNode* root(){
         return root_;
     };
 private:
     TreeNode* root_;
     int32_t total_node_cnt_;
-    TreeNode* findNode(int key);
-    TreeNode* balancing(TreeNode* node, int key);
+    TreeNode* FindNode(int key);
+    TreeNode* InsertRecursive(TreeNode* node, int key);
+    TreeNode* EraseRecursive(TreeNode* node, int key);
+    TreeNode* Balancing(TreeNode* node, int key);
+    TreeNode* RotateRight(TreeNode* node);
+    TreeNode* RotateLeft(TreeNode* node);
+    int RankRecursive(TreeNode* node, int key);
+    void InorderTraversal(TreeNode* node);
 };
 #endif//AVLTREE_AVL_TREE_H
