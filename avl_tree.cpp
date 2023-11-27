@@ -20,13 +20,12 @@ TreeNode* AVLTree:: rotateRight(TreeNode* z) { // y는 z의 왼쪽 자식 노드
     z->setLeftNode(T2); // z 노드의 왼쪽 자식 노드를 y노드 오른쪽 서브트리(T2)로 변경
     // 위치가 바뀌었으므로 노드 높이 갱신
 
-    int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : 0;
-    int zRightHeight = (z->rightNode() != nullptr) ? z->rightNode()->height() : 0;
-
-    int yLeftHeight = (y->leftNode() != nullptr) ? y->leftNode()->height() : 0;
-    int yRightHeight = (y->rightNode() != nullptr) ? y->rightNode()->height() : 0;
-
+    int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : -1;
+    int zRightHeight = (z->rightNode() != nullptr) ? z->rightNode()->height() : -1;
     z->setHeight(1 + max(zLeftHeight, zRightHeight));
+
+    int yLeftHeight = (y->leftNode() != nullptr) ? y->leftNode()->height() : -1;
+    int yRightHeight = (y->rightNode() != nullptr) ? y->rightNode()->height() : -1;
     y->setHeight(1 + max(yLeftHeight, yRightHeight));
 
     // 새로운 루트 노드 y를 반환
@@ -42,13 +41,12 @@ TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노�
     z->setRightNode(T2); // z노드의 오른쪽 자식 노드를 y노드 왼쪽 서브트리(T2)로 변경
 
     // 위치가 바뀌었으므로 노드 높이 갱신
-    int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : 0;
-    int zRightHeight = (z->rightNode() != nullptr) ? z->rightNode()->height() : 0;
-
-    int yLeftHeight = (y->leftNode() != nullptr) ? y->leftNode()->height() : 0;
-    int yRightHeight = (y->rightNode() != nullptr) ? y->rightNode()->height() : 0;
-
+    int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : -1;
+    int zRightHeight = (z->rightNode() != nullptr) ? z->rightNode()->height() : -1;
     z->setHeight(1 + max(zLeftHeight, zRightHeight));
+
+    int yLeftHeight = (y->leftNode() != nullptr) ? y->leftNode()->height() : -1;
+    int yRightHeight = (y->rightNode() != nullptr) ? y->rightNode()->height() : -1;
     y->setHeight(1 + max(yLeftHeight, yRightHeight));
 
     // 새로운 루트 노드 y를 반환
@@ -57,49 +55,51 @@ TreeNode* AVLTree:: rotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노�
 
 int AVLTree::insert(int key) {
 
-    root_ = insertRecursive(root_, key);
+    root_ = insertRecursive(root_, key); // 루트에서부터 시작해 재귀적으로 키 값 삽입
     return root_ ? root_->height() : -1;
 
 }
 TreeNode* AVLTree:: insertRecursive(TreeNode* node, int key) {
-    if (node == nullptr) {
+    if (node == nullptr) { // 노드가 널포인터 값일 경우 전체 노드의 개수를 1 증가시키고, TreeNode 생성
         ++total_node_cnt_;
         return new TreeNode(key, nullptr, nullptr, nullptr);
     }
     if (key < node->key()) {
         node->setLeftNode(insertRecursive(node->leftNode(), key));
-    }
-    else if (key > node->key()) {
+    } else if (key > node->key()) {
         node->setRightNode(insertRecursive(node->rightNode(), key));
-    }
-    else {
+    } else {
         return node;
     }
 
-    int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : 0;
-    int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
+    int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : -1;
+    int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : -1;
+
     node->setHeight(1 + max(leftHeight, rightHeight));
 
+    return balancing(node, key);
+}
+TreeNode* AVLTree::balancing(TreeNode* node, int key) { // BF를 이용해 회전로직을 구현
     int balance = getBalance(node); // 노드 밸런스 유지
 
     // LL (Left Left, right rotation 수행하여 균형을 맞춤)
     if (balance > 1 && key < node->leftNode()->key()) {
-        return rotateRight(node); // LL rotate
+        node = rotateRight(node);
     }
 
     // RR (Right Right, left rotation 수행하여 균형을 맞춤)
     if (balance < -1 && key > node->rightNode()->key())
-        return rotateLeft(node); // RR rotate
+        node = rotateLeft(node);
 
     // LR (Left Right 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
     if (balance > 1 && key > node->leftNode()->key()) {
         node->setLeftNode(rotateLeft(node->leftNode()));
-        return rotateRight(node);
+        node =  rotateRight(node);
     }
     // RL (Right, Left 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
     if (balance < -1 && key < node->rightNode()->key()) {
         node->setRightNode(rotateRight(node->rightNode()));
-        return rotateLeft(node);
+        node= rotateLeft(node);
     }
     return node;
 }
@@ -141,7 +141,6 @@ TreeNode* AVLTree::findNode(int key) {
     return nullptr; // 노드를 찾지 못한 경우 nullptr 반환
 }
 
-
 pair<int,int> AVLTree::minimum(int key)  {
     return {0,0};
 }
@@ -172,7 +171,7 @@ int AVLTree::rankRecursive(TreeNode* node, int key) {
 }
 
 
-void AVLTree::inorderTraversal(TreeNode* node){
+void AVLTree::inorderTraversal(TreeNode* node){ // 왼쪽 자식 -> 루트 -> 오른쪽 자식 순으로 중위순회 수행
     if(node == nullptr) return;
     inorderTraversal(node->leftNode());
 
