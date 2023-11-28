@@ -111,7 +111,7 @@ int AVLTree::Erase(int key) {
     return 0;
   }else{
     int target_depth = targetNode->depth();
-    EraseRecursive(root_,key);
+    root_ = EraseRecursive(root_,key);
     return target_depth;
   }
 
@@ -146,9 +146,9 @@ TreeNode* AVLTree::EraseRecursive(TreeNode* node, int key){
       }
       else{
         *node = *temp;
-        this->total_node_cnt_ -= 1;
       }
 
+      this->total_node_cnt_ -= 1;
       delete temp;
     }
     //노드가 좌우로 달려있을경우
@@ -173,8 +173,8 @@ TreeNode* AVLTree::EraseRecursive(TreeNode* node, int key){
   //TODO: insert 함수와 중복됨 해당 기능 함수와 필요가 있음
   // 트리 안정화 작업
 
-  int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : 0;
-  int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
+  int leftHeight = (node->leftNode() != nullptr) ? node->leftNode()->height() : -1;
+  int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : -1;
   node->setHeight(1 + max(leftHeight, rightHeight));
 
 
