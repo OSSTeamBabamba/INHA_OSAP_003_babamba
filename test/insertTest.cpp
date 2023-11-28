@@ -11,12 +11,14 @@ int main(){
 
     for(int key : keys) {
         cout << "Insert: " << key << "\n";
-         avltree->insert(key);
-         cout << "find depth : " << avltree->find(key) << endl;
-         cout << "rank : " << avltree->rank(key) << endl;
+         avltree->Insert(key);
     }
-
-    avltree->inorderTraversal(avltree->getRoot());
+    for(int key : keys) {
+        cout << "key: " << key << "\n";
+        cout << "find depth : " << avltree->Find(key) << endl;
+        cout << "depth : " << avltree->Rank(key).first << " rank: "<< avltree->Rank(key).second << endl;
+        cout<<"cur minimum: "<<avltree->Minimum(key).first<<" key: "<<avltree->Minimum(key).second<<endl;
+    }
 
     delete avltree;
     return 0;

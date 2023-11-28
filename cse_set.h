@@ -12,7 +12,7 @@ public:
     virtual int Find(int key) = 0;
     virtual std::pair<int, int> Minimum(int key) = 0;
     virtual std::pair<int, int> Maximum(int key) = 0;
-    virtual int Rank(int key) = 0;
+    virtual std::pair<int,int> Rank(int key) = 0;
 
 };
 

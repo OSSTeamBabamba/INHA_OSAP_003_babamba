@@ -18,7 +18,7 @@ public:
     int Find(int key);
     pair<int, int> Minimum(int key);
     pair<int, int> Maximum(int key);
-    int Rank(int key);
+    pair<int,int> Rank(int key);
 
     TreeNode* root(){
         return root_;
