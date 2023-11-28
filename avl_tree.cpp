@@ -89,16 +89,16 @@ TreeNode* AVLTree::Balancing(TreeNode* node, int key) { // BF를 이용해 회�
     }
 
     // RR (Right Right, left rotation 수행하여 균형을 맞춤)
-    if (balance < -1 && key > node->rightNode()->key())
+    else if (balance < -1 && key > node->rightNode()->key())
         node = RotateLeft(node);
 
     // LR (Left Right 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
-    if (balance > 1 && key > node->leftNode()->key()) {
+    else if (balance > 1 && key > node->leftNode()->key()) {
         node->setLeftNode(RotateLeft(node->leftNode()));
         node =  RotateRight(node);
     }
     // RL (Right, Left 순으로 총 두번의 rotation 수행하여 균형을 맞춤)
-    if (balance < -1 && key < node->rightNode()->key()) {
+    else if (balance < -1 && key < node->rightNode()->key()) {
         node->setRightNode(RotateRight(node->rightNode()));
         node= RotateLeft(node);
     }
