@@ -231,11 +231,24 @@ pair<int,int> AVLTree::Minimum(int key)  {
         curNode = curNode->leftNode();
     }
     //값 리턴
-    return {curNode->depth(), curNode->key()};
+    return {Find(curNode->key()), curNode->key()};
 }
 
 pair<int,int> AVLTree::Maximum(int key) {
-    return {0,0};
+  //주어진 key를 가진 노드를 찾습니다.
+  TreeNode* curNode = FindNode(key);
+
+  //만약 할당된 노드가 nullptr 이라면 해당 키를 가진 노드가 없다는 뜻이므로
+  //에러의 의미인 -1을 반환합니다.
+  //조건에 부합하는 테스트케이스라면 이 코드는 작동하지 않음.
+  if(curNode == nullptr) return {-1,-1};
+
+  //왼쪽 자식이 nullptr일 때까지 왼쪽 자식 노드를 curNode로 update합니다.
+  while (curNode->rightNode() != nullptr) {
+    curNode = curNode->rightNode();
+  }
+  //값 리턴
+  return {Find(curNode->key()), curNode->key()};
 }
 pair<int,int> AVLTree::Rank(int key) {
     return {Find(key), RankRecursive(root_, key)};
