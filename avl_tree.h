@@ -34,5 +34,6 @@ private:
     TreeNode* RotateLeft(TreeNode* node);
     int RankRecursive(TreeNode* node, int key);
     void InorderTraversal(TreeNode* node);
+    int SubtreeSize(TreeNode* node);
 };
 #endif//AVLTREE_AVL_TREE_H
