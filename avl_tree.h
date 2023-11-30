@@ -30,6 +30,7 @@ private:
     TreeNode* InsertRecursive(TreeNode* node, int key);
     TreeNode* EraseRecursive(TreeNode* node, int key);
     TreeNode* Balancing(TreeNode* node, int key);
+    TreeNode* EraseBalancing(TreeNode* node, int key);
     TreeNode* RotateRight(TreeNode* node);
     TreeNode* RotateLeft(TreeNode* node);
     int RankRecursive(TreeNode* node, int key);
