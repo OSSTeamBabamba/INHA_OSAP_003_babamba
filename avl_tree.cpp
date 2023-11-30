@@ -271,18 +271,19 @@ int AVLTree::RankRecursive(TreeNode* node, int key) {
     if (node == nullptr) {
         return 0; // 노드가 없으면 0 반환
     }
-
-    int leftCount = RankRecursive(node->leftNode(), key); // 왼쪽 서브트리의 랭크 계산
-    int rightCount = RankRecursive(node->rightNode(), key); // 오른쪽 서브트리의 랭크 계산
-
-    if (key >= node->key()) {
-        // 현재 노드의 키가 주어진 키보다 작거나 같으면
-        // 왼쪽 서브트리의 랭크, 오른쪽 서브트리의 랭크, 현재 노드를 포함한 1을 더한 값을 반환
-        return leftCount + rightCount + 1;
-    } else {
-        // 현재 노드의 키가 주어진 키보다 크면
-        // 왼쪽 서브트리의 랭크를 반환
-        return leftCount;
+    //주어진 키가 현재 노드의 키보다 같거나 클 때
+    //즉, 왼쪽으로는 탐색하지 않아도 된다는 뜻
+    if(node->key() <= key){
+        if(node->leftNode() == nullptr){
+            return 1 + RankRecursive(node->rightNode(),key);
+        }
+        else{
+            //만약 left노드가 존재하면 insert와 delete에서 이미 구해진 서브트리의 사이즈로 계산.
+            return 1 + SubtreeSize(node->leftNode()) + RankRecursive(node->rightNode(), key);
+        }
+    }
+    else{
+        return RankRecursive(node->leftNode(), key);
     }
 }
 
