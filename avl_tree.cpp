@@ -20,6 +20,11 @@ TreeNode* AVLTree:: RotateRight(TreeNode* z) { // y는 z의 왼쪽 자식 노드
     z->setLeftNode(T2); // z 노드의 왼쪽 자식 노드를 y노드 오른쪽 서브트리(T2)로 변경
     // 위치가 바뀌었으므로 노드 높이 갱신
 
+    //사이즈 변경
+    z->setSize(1 + SubtreeSize(z->leftNode()) + SubtreeSize(z->rightNode()));
+    y->setSize(1 + SubtreeSize(y->leftNode()) + SubtreeSize(y->rightNode()));
+
+
     int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : -1;
     int zRightHeight = (z->rightNode() != nullptr) ? z->rightNode()->height() : -1;
     z->setHeight(1 + max(zLeftHeight, zRightHeight));
@@ -39,6 +44,11 @@ TreeNode* AVLTree:: RotateLeft(TreeNode* z) { // y는 z의 오른쪽 자식 노�
     // left 회전 수행
     y->setLeftNode(z); // y노드의 왼쪽 자식 노드를 z노드로 변경
     z->setRightNode(T2); // z노드의 오른쪽 자식 노드를 y노드 왼쪽 서브트리(T2)로 변경
+
+    //사이즈 변경
+    z->setSize(1 + SubtreeSize(z->leftNode()) + SubtreeSize(z->rightNode()));
+    y->setSize(1 + SubtreeSize(y->leftNode()) + SubtreeSize(y->rightNode()));
+
 
     // 위치가 바뀌었으므로 노드 높이 갱신
     int zLeftHeight = (z->leftNode() != nullptr) ? z->leftNode()->height() : -1;
@@ -76,6 +86,10 @@ TreeNode* AVLTree:: InsertRecursive(TreeNode* node, int key) {
     int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : -1;
 
     node->setHeight(1 + max(leftHeight, rightHeight));
+
+    int leftSize = (node->leftNode() != nullptr) ? node->leftNode()->size() : 0;
+    int rightSize = (node->rightNode() != nullptr) ? node->rightNode()->size() : 0;
+    node->setSize(1 + leftSize + rightSize);
 
     return Balancing(node, key);
 }
@@ -177,6 +191,9 @@ TreeNode* AVLTree::EraseRecursive(TreeNode* node, int key){
   int rightHeight = (node->rightNode() != nullptr) ? node->rightNode()->height() : 0;
   node->setHeight(1 + max(leftHeight, rightHeight));
 
+  int leftSize = (node->leftNode() != nullptr) ? node->leftNode()->size() : 0;
+  int rightSize = (node->rightNode() != nullptr) ? node->rightNode()->size() : 0;
+  node->setSize(1 + leftSize + rightSize);
 
   return Balancing(node,key);
 
@@ -188,6 +205,15 @@ bool AVLTree::Empty() {
 int AVLTree::Size() {
     return total_node_cnt_;
 }
+
+int AVLTree::SubtreeSize(TreeNode* node) {
+    if(node == nullptr){
+        return 0;
+    }
+    return node->size();
+}
+
+
 int AVLTree::Find(int key) {
     TreeNode* node = FindNode(key);
     if (node != nullptr)
