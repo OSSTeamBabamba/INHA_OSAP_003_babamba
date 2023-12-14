@@ -76,4 +76,3 @@ TEST(SET_AVLTEST, FindMinimumAfterErase) {
     EXPECT_EQ(avlTree->Minimum(10), make_pair(1,5)); //10을 루트로 하는 서브트리의 Minumum노드는 3에서 5로 변경
     ASSERT_EQ(avlTree->Minimum(3), make_pair(-1,-1)); //삭제된 3은 찾을 수 없다.
 }
-}
