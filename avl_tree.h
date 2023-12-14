@@ -30,9 +30,11 @@ private:
     TreeNode* InsertRecursive(TreeNode* node, int key);
     TreeNode* EraseRecursive(TreeNode* node, int key);
     TreeNode* Balancing(TreeNode* node, int key);
+    TreeNode* EraseBalancing(TreeNode* node, int key);
     TreeNode* RotateRight(TreeNode* node);
     TreeNode* RotateLeft(TreeNode* node);
     int RankRecursive(TreeNode* node, int key);
     void InorderTraversal(TreeNode* node);
+    int SubtreeSize(TreeNode* node);
 };
 #endif//AVLTREE_AVL_TREE_H
