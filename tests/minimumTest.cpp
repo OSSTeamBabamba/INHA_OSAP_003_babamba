@@ -8,7 +8,7 @@ using namespace std;
 
 
 //값을 하나만 Insert 후 Minumum의 키
-TEST(SET_AVLTEST, FindMinimumKey0) {
+TEST(SET_AVLTEST, minimumTest0) {
     Set* avlTree = new AVLTree();
     avlTree->Insert(1);  // 1 삽입
 
@@ -17,7 +17,7 @@ TEST(SET_AVLTEST, FindMinimumKey0) {
 }
 
 //여러 값 Insert 후 Minumum의 키
-TEST(SET_AVLTEST, FindMinimumKey1) {
+TEST(SET_AVLTEST, minimumTest1) {
     Set* avlTree = new AVLTree();
     vector<int> keys = {10,5,15,3,7,12,18};
     for(auto key : keys) avlTree->Insert(key);  // AVL트리에 keys 삽입
@@ -31,7 +31,7 @@ TEST(SET_AVLTEST, FindMinimumKey1) {
 }
 
 //Insert 후 Minimum의 Depth
-TEST(SET_AVLTEST, FindMinimumDepth) {
+TEST(SET_AVLTEST, minimumTest2) {
     Set* avlTree = new AVLTree();
     vector<int> keys = {10,5,15,3,7};
     //AVL트리에 keys 삽입
@@ -45,7 +45,7 @@ TEST(SET_AVLTEST, FindMinimumDepth) {
 }
 
 //Insert 후 Minimum Node
-TEST(SET_AVLTEST, FindMinimumNode) {
+TEST(SET_AVLTEST, minimumTest3) {
     Set* avlTree = new AVLTree();
     vector<int> keys = {10,5,15,3,7};
     //AVL트리에 keys 삽입
@@ -62,7 +62,7 @@ TEST(SET_AVLTEST, FindMinimumNode) {
 
 
 //삽입 및 삭제 연산 후 Minimum 노드
-TEST(SET_AVLTEST, FindMinimumAfterErase) {
+TEST(SET_AVLTEST, minimumTest4) {
     Set* avlTree = new AVLTree();
     vector<int> keys = {10,5,15,3,7,12,18};
     for(auto key : keys) avlTree->Insert(key);  // AVL트리에 keys 삽입
