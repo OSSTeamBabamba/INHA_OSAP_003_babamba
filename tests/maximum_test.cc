@@ -49,7 +49,7 @@ TEST(SET_AVLTEST, FindMaximumDepth) {
 
 // Insert 후 Maximum Node
 TEST(SET_AVLTEST, FindMaximumNode) {
-  Set* avlTree = new AVLTree();
+  Set* avlTree = new AVLTreeSetAdapter();
   vector<int> keys = {10, 5, 15, 3, 7};
   // AVL트리에 keys 삽입
   for (auto key : keys) avlTree->Insert(key);
@@ -82,7 +82,7 @@ TEST(SET_AVLTEST, FindMaximumNode) {
 
 // 삽입 및 삭제 연산 후 Maximum 노드
 TEST(SET_AVLTEST, FindMaximumAfterErase) {
-  Set* avlTree = new AVLTree();
+  Set* avlTree = new AVLTreeSetAdapter();
   vector<int> keys = {10, 5, 15, 3, 7, 12, 18};
   for (auto key : keys) avlTree->Insert(key);  // AVL트리에 keys 삽입
 

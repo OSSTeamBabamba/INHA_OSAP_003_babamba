@@ -114,3 +114,8 @@ TEST(SET_AVLTEST, minimumTest4) {
   ASSERT_EQ(avlTree->Minimum(3), make_pair(-1, -1));  // 삭제된 3은 찾을 수
                                                       // 없다.
 }
+
+int main(int argc, char** argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
