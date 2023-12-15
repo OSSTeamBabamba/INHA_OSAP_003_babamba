@@ -8,22 +8,13 @@
 #include "tree.h"
 using namespace std;
 
-class AVLTree : public Set, public Tree {
+class AVLTree : public Tree {
 public:
-    int getBalance(TreeNode* node); // 균형이 깨졌는지 check
-    int Insert(int key);
-    int Erase(int key);
-    bool Empty();
-    int Size();
-    int Find(int key);
-    pair<int, int> Minimum(int key);
-    pair<int, int> Maximum(int key);
-    pair<int,int> Rank(int key);
 
     TreeNode* root(){
         return root_;
     };
-private:
+protected:
     TreeNode* root_;
     int32_t total_node_cnt_;
     TreeNode* FindNode(int key);
@@ -36,5 +27,7 @@ private:
     int RankRecursive(TreeNode* node, int key);
     void InorderTraversal(TreeNode* node);
     int SubtreeSize(TreeNode* node);
+    int getBalance(TreeNode* node); // 균형이 깨졌는지 check
+
 };
 #endif//AVLTREE_AVL_TREE_H
