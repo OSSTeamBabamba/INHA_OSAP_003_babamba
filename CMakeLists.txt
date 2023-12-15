@@ -19,7 +19,7 @@ target_link_libraries(test_insert common_library ${GTEST_LIBRARIES} pthread )
 add_executable(test_erase tests/erase_test.cc)
 target_link_libraries(test_erase common_library ${GTEST_LIBRARIES} pthread )
 
-add_executable(test_empty tests/empty_test.cc)
+add_executable(test_empty tests/empty_test.cc )
 target_link_libraries(test_empty common_library ${GTEST_LIBRARIES} pthread )
 
 add_executable(test_size tests/size_test.cc)
@@ -34,6 +34,9 @@ target_link_libraries(test_maximum common_library ${GTEST_LIBRARIES} pthread )
 add_executable(test_rank tests/rank_test.cc)
 target_link_libraries(test_rank common_library ${GTEST_LIBRARIES} pthread )
 
+
+add_executable(test_find tests/find_test.cc)
+target_link_libraries(test_find common_library ${GTEST_LIBRARIES} pthread )
 
 
 file(
