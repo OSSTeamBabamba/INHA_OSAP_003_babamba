@@ -1,5 +1,5 @@
 /*
-* insertTest.cpp
+* sizeTest.cpp
 *
 * Copyright (c) 2023 Lee Soo-young
 *
@@ -28,37 +28,45 @@
 
 using namespace std;
 
-// Fixture 클래스 정의
-class SETAVL_TEST : public ::testing::Test{
+// 값이 매개변수화된 테스트 Fixture 클래스 정의
+class SET_AVLTEST : public ::testing::TestWithParam<std::vector<int>>{
  protected:
   Set* avltree;
 
-  void SetUp() override {
+  void SetUp() override{
     avltree = new AVLTree();
   }
 
-  void TearDown() override {
+  void TearDown() override{
     delete avltree;
   }
 };
 
-// 트리가 처음에 비어 있는지 테스트
-TEST_F(SETAVL_TEST, InitiallyEmpty){
-  EXPECT_TRUE(avltree->Empty());
+// 테스트 케이스 정의
+TEST_P(SET_AVLTEST, Size){
+  for(int key : GetParam()){
+    avltree->Insert(key);
+  }
+  // GetParam().size()는 삽입된 요소의 수와 일치
+  ASSERT_EQ(GetParam().size(), avltree->Size());
 }
 
-// 트리에 요소를 추가한 후 비어 있지 않은지 테스트
-TEST_F(SETAVL_TEST, NotEmptyAfterInsertion){
-  avltree->Insert(10);
-  EXPECT_FALSE(avltree->Empty());
-}
+// 테스트에 이용할 데이터 세트를 정의
+std::vector<std::vector<int>> testDatasets = {
+    {},                 // 비어 있는 트리
+    {10},               // 하나의 요소를 삽입
+    {10, 20},           // 두 개의 요소를 삽입
+    {10, 20, 30},       // 세 개의 요소를 삽입
+    {10, 20, 30, 40}    // 네 개의 요소를 삽입
+};
 
-// 트리에 요소를 추가하고 삭제한 후 다시 비어 있는지 테스트
-TEST_F(SETAVL_TEST, EmptyAfterErase){
-  avltree->Insert(10);
-  avltree->Erase(10);
-  EXPECT_TRUE(avltree->Empty());
-}
+// 테스트 데이터를 테스트 케이스에 전달
+INSTANTIATE_TEST_SUITE_P(
+    Default,
+    SET_AVLTEST,
+    ::testing::ValuesIn(testDatasets)
+);
+
 
 int main(int argc, char **argv){
   testing::InitGoogleTest(&argc, argv);
