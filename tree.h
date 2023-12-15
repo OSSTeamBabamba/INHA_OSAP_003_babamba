@@ -1,22 +1,19 @@
 #ifndef AVLTREESTL_TREE_H
 #define AVLTREESTL_TREE_H
 
-#include "tree_node.h"
 #include "node.h"
+#include "tree_node.h"
 
 class Tree {
-public:
-    int Insert(int key);
-    int Erase(int key);
-    bool Empty();
-    int Size();
-    int Find(int key);
-    int Rank(int key);
+ public:
+  int Insert(int key);
+  int Erase(int key);
+  bool Empty();
+  int Size();
 
-protected:
-    TreeNode* root_;
-    int32_t total_node_cnt;
+ protected:
+  TreeNode* root_;
+  int32_t total_node_cnt;
 };
 
-
-#endif//AVLTREESTL_TREE_H
+#endif  // AVLTREESTL_TREE_H
