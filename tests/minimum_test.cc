@@ -1,3 +1,24 @@
+/*
+* minimum_test.cc
+*
+* Copyright (c) 2023 정건우
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* Created on: 2023-12-15
+* Author: 정건우
+*/
+
 #include <gtest/gtest.h>
 
 #include <algorithm>
@@ -113,4 +134,9 @@ TEST(SET_AVLTEST, minimumTest4) {
           1, 5));  // 10을 루트로 하는 서브트리의 Minumum노드는 3에서 5로 변경
   ASSERT_EQ(avlTree->Minimum(3), make_pair(-1, -1));  // 삭제된 3은 찾을 수
                                                       // 없다.
+}
+
+int main(int argc, char** argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
