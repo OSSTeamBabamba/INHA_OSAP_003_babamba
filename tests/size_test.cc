@@ -1,7 +1,7 @@
 /*
- * sizeTest.cpp
+ * size_test.cc
  *
- * Copyright (c) 2023 Lee Soo-young
+ * Copyright (c) 2023 박성훈
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  * Created on: 2023-12-14
- * Author: Lee Soo-young
+ * Author: 박성훈
  */
 
 #include <gtest/gtest.h>

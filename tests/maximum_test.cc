@@ -1,5 +1,5 @@
 /*
- * Maximum_test.cpp
+ * maximum_test.cc
  *
  * Copyright (c) 2023 Lee Soo-young
  *
