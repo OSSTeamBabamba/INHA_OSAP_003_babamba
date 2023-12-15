@@ -24,7 +24,7 @@ add_executable(AVLTreeSTL
         node.cpp
         node.h
         tree_node.h
-        tree_node.cpp)
+        tree_node.cpp tests/rankTest.cpp tests/minimumTest.cpp)
 
 #googletest 라이브러리를 빌드합니다.
 add_subdirectory(googletest)
